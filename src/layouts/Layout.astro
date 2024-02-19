@@ -1,0 +1,86 @@
+---
+import type { Route } from "../routes.ts";
+import { routes } from "../routes.ts";
+import { ViewTransitions } from "astro:transitions";
+import RecursiveMenuItem from "../components/RecursiveMenuItem.tsx";
+import GrapView from "../components/GraphView.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ViewTransitions />
+  </head>
+
+  <body>
+    <header class="sm:h-[50px]">
+      <nav
+        class="hidden bg-sky-900 text-slate-100 sm:block sm:h-[50px] sm:px-5"
+      >
+        <ul class="sm:flex sm:min-h-[50px]">
+          {routes.map((route: Route) => <RecursiveMenuItem route={route} />)}
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <div id="grap-view">
+      <GrapView />
+    </div>
+
+    <style is:global>
+      :root {
+        --danger-color: #ff4136;
+      }
+      html {
+        font-family: system-ui, sans-serif;
+        background: #eaeaea;
+        color: #333;
+        background-size: 224px;
+        height: 100vh;
+      }
+      body {
+        min-height: 100%;
+        display: grid;
+        grid-template-areas:
+          "header header  header"
+          "main   main    aside";
+        grid-template-columns: 0.5fr 0.5fr 2fr;
+        grid-template-rows: 50px 1fr;
+      }
+
+      header {
+        grid-area: header;
+      }
+      main {
+        grid-area: main;
+      }
+      #grap-view {
+        background-color: white;
+        grid-area: aside;
+      }
+    </style>
+
+    <script>
+      const help = document.getElementById("optionMenu-Ayuda");
+      if (help) {
+        help.addEventListener("click", () => {
+          alert("Ayuda");
+        });
+      }
+    </script>
+  </body>
+</html>
